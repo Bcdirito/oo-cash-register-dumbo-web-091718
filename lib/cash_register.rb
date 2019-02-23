@@ -1,47 +1,39 @@
+require "pry"
+
 class CashRegister
-
-  def initialize(employee=nil)
+  attr_reader :discount
+  attr_accessor :total
+  
+  def initialize(discount=false)
     @total = 0
-    @employee ||= nil
-    @employee = employee
+    @discount = discount
     @items = []
+    @prices = []
   end
-
-  def discount
-    @discount = 20
-  end
-
-  def total=(total)
-    @total = total
-  end
-
-  def total
-    @total
-  end
-
-  def add_item(title, price, quantity = 1)
-    @total += price * quantity
-
+  
+  def add_item(title, price, quantity=1)
+    self.total += price * quantity
+    @prices << price
     quantity.times do
       @items << title
     end
   end
-
-  def apply_discount
-    if @employee == nil
-      return "There is no discount to apply."
-    else
-      self.total= total - (total * (discount/100.0))
-      self.total=total.to_i
-      return "After the discount, the total comes to $#{@total}."
-    end
-  end
-
+  
   def items
     @items
   end
-
+  
+  def apply_discount
+    if self.discount != false
+      difference = self.total * (self.discount/100.to_f)
+      self.total -= difference.to_i
+      return "After the discount, the total comes to $#{self.total}."
+    else
+      return "There is no discount to apply."
+    end
+  end
+  
   def void_last_transaction
-    @total -= @total
+    @total -= @prices[-1]
   end
 end
