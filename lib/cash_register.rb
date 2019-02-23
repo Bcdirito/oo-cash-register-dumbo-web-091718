@@ -12,9 +12,7 @@ class CashRegister
   
   def add_item(title, price, quantity=1)
     self.total += price * quantity
-    if !self.items.include?(title)
-      self.items << title
-    end
+    self.items << title
   end
   
   def items
